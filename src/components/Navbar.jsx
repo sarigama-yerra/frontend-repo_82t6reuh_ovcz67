@@ -1,44 +1,49 @@
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Link, useLocation } from 'react-router-dom'
 
 const navItems = [
-  { label: 'Dashboard', href: '#' },
-  { label: 'Kompetisi', href: '#' },
-  { label: 'Lost & Found', href: '#' },
-  { label: 'Event', href: '#' },
-  { label: 'Forum', href: '#' },
+  { label: 'Dashboard', href: '/dashboard' },
+  { label: 'Kompetisi', href: '/kompetisi' },
+  { label: 'Lost & Found', href: '/lostfound' },
+  { label: 'Event', href: '/events' },
+  { label: 'Forum', href: '/forum' },
 ]
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
+  const location = useLocation()
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mt-6 rounded-2xl border border-white/10 bg-white/60 backdrop-blur supports-[backdrop-filter]:bg-white/40 shadow-sm">
           <div className="flex h-16 items-center justify-between px-4">
-            <a href="#" className="flex items-center gap-2">
+            <Link to="/" className="flex items-center gap-2">
               <span className="inline-block h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-400" />
               <span className="text-lg font-semibold tracking-tight">Younifirst</span>
-            </a>
+            </Link>
 
             <div className="hidden md:flex items-center gap-8">
-              {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="text-sm font-medium text-slate-700 hover:text-slate-900 transition-colors"
-                >
-                  {item.label}
-                </a>
-              ))}
-              <a
-                href="#"
+              {navItems.map((item) => {
+                const active = location.pathname.startsWith(item.href)
+                return (
+                  <Link
+                    key={item.label}
+                    to={item.href}
+                    className={`text-sm font-medium transition-colors ${active ? 'text-slate-900' : 'text-slate-700 hover:text-slate-900'}`}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              })}
+              <Link
+                to="/login"
                 className="rounded-full bg-slate-900 text-white text-sm px-4 py-2 shadow hover:shadow-md transition-all"
               >
                 Get Started
-              </a>
+              </Link>
             </div>
 
             <button
@@ -64,22 +69,22 @@ export default function Navbar() {
             <div className="mt-2 overflow-hidden rounded-2xl border border-white/10 bg-white/80 backdrop-blur">
               <div className="flex flex-col p-4">
                 {navItems.map((item) => (
-                  <a
+                  <Link
                     key={item.label}
-                    href={item.href}
+                    to={item.href}
                     onClick={() => setOpen(false)}
-                    className="rounded-xl px-3 py-3 text-base font-medium text-slate-800 hover:bg-slate-100/80"
+                    className={`rounded-xl px-3 py-3 text-base font-medium ${location.pathname.startsWith(item.href) ? 'text-slate-900 bg-slate-100/80' : 'text-slate-800 hover:bg-slate-100/80'}`}
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 ))}
-                <a
-                  href="#"
+                <Link
+                  to="/login"
                   onClick={() => setOpen(false)}
                   className="mt-2 rounded-xl bg-slate-900 px-4 py-3 text-center text-white"
                 >
                   Get Started
-                </a>
+                </Link>
               </div>
             </div>
           </motion.div>
